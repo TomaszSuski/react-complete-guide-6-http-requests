@@ -12,7 +12,7 @@ function App() {
     setError(null);
     setIsLoading(true);
     try {
-      const response = await fetch("https://swapi.dev/api/films");
+      const response = await fetch("https://swapi.dev/api/film");
 
       if (!response.ok) {
         throw new Error("Something went wrong");
@@ -35,19 +35,41 @@ function App() {
     setIsLoading(false);
   }
 
+  let content;
+
+  switch (true) {
+    case isLoading:
+      content = <p>Loading...</p>;
+      break;
+    case !isLoading && error:
+      content = <p>{error}</p>;
+      break;
+    case !isLoading && !error && movies.length > 0:
+      content = <MoviesList movies={movies} />;
+      break;
+    case !isLoading && !error && movies.length === 0:
+      content = <p>There are no movies to display</p>;
+      break;
+  }
+
+  content = <p>There are no movies to display</p>;
+
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  }
+  if (!isLoading && error) {
+    content = <p>{error}</p>;
+  }
+  if (!isLoading && !error && movies.length > 0) {
+    content = <MoviesList movies={movies} />;
+  }
+
   return (
     <React.Fragment>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
-      <section>
-        {isLoading && <p>Loading...</p>}
-        {!isLoading && error && <p>{error}</p>}
-        {!isLoading && !error && movies.length === 0 && (
-          <p>There are no movies to display</p>
-        )}
-        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
-      </section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
