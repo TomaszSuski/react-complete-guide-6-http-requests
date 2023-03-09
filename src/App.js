@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
 import AddMovie from "./components/AddMovie";
-import ApiUrl from "./Config/config";
+import getApiUrl from "./Config/config";
 import "./App.css";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(ApiUrl());
+      const response = await fetch(getApiUrl());
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
@@ -45,7 +45,7 @@ function App() {
 
   async function addMovieHandler(movie) {
     console.log(movie);
-    const response = await fetch(ApiUrl(), {
+    const response = await fetch(getApiUrl(), {
       method: "POST",
       body: JSON.stringify(movie),
       headers: {
